@@ -86,6 +86,7 @@ pipeline {
         beforeAgent true
       }
       steps{
+        
         sh 'ci/component-test.sh'
       }
     }
