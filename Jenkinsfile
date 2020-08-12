@@ -15,7 +15,7 @@ pipeline {
       parallel {
         stage('Say Hello') {
           steps {
-            sh 'echo "hello world"'
+            sh 'echo "hello world!"'
           }
         }
 
@@ -52,7 +52,7 @@ pipeline {
           steps {
             unstash 'code'
             sh label: '', script: 'ci/unit-test-app.sh'
-            junit 'app/build/test-results/test/TEST-*.xml'sdad
+            junit 'app/build/test-results/test/TEST-*.xml'
           }
           post {
               always {
