@@ -80,16 +80,15 @@ pipeline {
 
     stage('component test'){
       agent {
-                docker "gradle:jdk11"
+            docker "gradle:jdk11"
       }
       when{
         not{
-          branch 'dev/'
+          branch 'dev/*'
         }
+        beforeAgent true
       }
       steps{
-        unstash 'code'
-        beforeAgent true
         sh 'ci/component-test.sh'
       }
     }
