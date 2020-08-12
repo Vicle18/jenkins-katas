@@ -52,7 +52,7 @@ pipeline {
           steps {
             unstash 'code'
             sh label: '', script: 'ci/unit-test-app.sh'
-            junit 'app/build/test-results/test/TEST-*.xml'
+            junit 'app/build/test-results/test/TEST-*.xml'sdad
           }
           post {
               always {
