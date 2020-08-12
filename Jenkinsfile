@@ -5,11 +5,10 @@ pipeline {
 
   agent any
   stages {
-    stage('clone down'){
-      steps{
+    stage('clone down') {
+      steps {
         stash(excludes: '.git', name: 'code')
       }
-      
     }
 
     stage('Parallel execution') {
@@ -34,7 +33,6 @@ pipeline {
             archiveArtifacts 'app/build/libs/'
             stash 'code'
           }
-          
           post {
               always {
                   sh 'ls'
@@ -56,7 +54,6 @@ pipeline {
             sh label: '', script: 'ci/unit-test-app.sh'
             junit 'app/build/test-results/test/TEST-*.xml'
           }
-          
           post {
               always {
                   sh 'ls'
@@ -65,9 +62,6 @@ pipeline {
               }
           }
         }
-
-
-
       }
     }
     
@@ -75,12 +69,24 @@ pipeline {
       environment {
         DOCKERCREDS = credentials('docker_login') //use the credentials just created in this stage
       }
-      
+      when{branch "master"}
       steps {
         unstash 'code' //unstash the repository code
         sh 'ci/build-docker.sh'
         sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin' //login to docker hub with the credentials above
         sh 'ci/push-docker.sh'
+      }
+    }
+
+    stage('component test'){
+      agent {
+                docker "gradle:jdk11"
+      }
+      when{branch 'dev/'}
+      steps{
+        unstash 'code'
+        beforeAgent true
+        sh 'ci/component-test.sh'
       }
     }
   }
