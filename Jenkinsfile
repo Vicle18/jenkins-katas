@@ -79,9 +79,6 @@ pipeline {
     }
 
     stage('component test'){
-      agent {
-            docker "gradle:jdk11"
-      }
       when{
         not{
           branch 'dev/*'
