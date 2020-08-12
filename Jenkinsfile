@@ -82,7 +82,11 @@ pipeline {
       agent {
                 docker "gradle:jdk11"
       }
-      when{branch 'dev/'}
+      when{
+        not{
+          branch 'dev/'
+        }
+      }
       steps{
         unstash 'code'
         beforeAgent true
